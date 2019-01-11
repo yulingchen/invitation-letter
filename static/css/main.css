@@ -1,3 +1,24 @@
 #canvas{
-  background-color: #fff;
+  background-color:transparent;
+}
+
+.control{
+  position: absolute;
+  top:40%;
+  right:0;
+  bottom:0;
+  left:0;
+}
+
+.control .run-left,.control .run-right{
+  width:50%;
+  height:100%;
+}
+
+.control .run-left{
+  float:left;
+}
+
+.control .run-right{
+  float:right;
 }
