@@ -1,6 +1,9 @@
 (function () {
   var stage,
-    scale,
+    w = document.documentElement.clientWidth,
+    h = document.documentElement.clientHeight,
+    scale = (h * 2 / 1334) / 2,
+    center = (w - 326 * scale) / 2 / scale,
     layer_bottom,
     layer_middle,
     layer_role,
@@ -44,11 +47,38 @@
       { src: "middle/door_left.png", id: "middle_door_left_3", container: "middle", position: { x: 10568, y: 594 } },
       { src: "middle/wall_left.png", id: "middle_wall_left_3", container: "middle", position: { x: 10528, y: 0 } },
 
+      // 角色
+      { src: "role/shadow.png", id: "role_shadow", container: "role", position: { x: center + 118, y: 1171 } },
+      { src: "role/stand_eyeopen_right.png", id: "role_stand_eyeopen_right", container: "role", position: { x: center, y: 738 } },
+      { src: "role/stand_eyeclose_right.png", id: "role_stand_eyeclose_right", hidden: true, container: "role", position: { x: center, y: 738 } },
+      { src: "role/stand_eyeopen_left.png", id: "role_stand_eyeopen_left", hidden: true, container: "role", position: { x: center + 10, y: 738 } },
+      { src: "role/stand_eyeclose_left.png", id: "role_stand_eyeclose_left", hidden: true, container: "role", position: { x: center + 10, y: 738 } },
+      { src: "role/axle.png", id: "role_axle", container: "role", position: { x: center + 106, y: 1033 } },
+
       // 欢迎 - 指示牌
       { src: "top/direct.png", id: "top_direct", container: "top", position: { x: -20, y: 95 } },
 
       // 签到-架子
       { src: "top/shelf.png", id: "top_shelf", container: "top", position: { x: 1530, y: -133 } },
+
+      // 签到-气球左
+      { src: "top/balloon_left.png", id: "top_balloon_left", container: "top", position: { x: 1570, y: 1140 } },
+
+      // 签到-礼物左
+      { src: "top/gift_left.png", id: "top_gift_left", container: "top", position: { x: 1815, y: 1120 } },
+
+      // 签到-拍照
+      { src: "top/photograph1.png", id: "top_photograph1", container: "top", position: { x: 2840, y: 1041 } },
+      { src: "top/photograph2.png", id: "top_photograph2", container: "top", position: { x: 3345, y: 990 } },
+      { src: "top/photograph3.png", id: "top_photograph3", container: "top", position: { x: 3105, y: 1165 } },
+      { src: "top/photograph4.png", id: "top_photograph4", container: "top", position: { x: 2878, y: 1050 } },
+      { src: "top/photograph5.png", id: "top_photograph5", container: "top", position: { x: 2955, y: 1025 } },
+
+      // 签到-气球右
+      { src: "top/balloon_right.png", id: "top_balloon_right", container: "top", position: { x: 3690, y: 1070 } },
+
+      // 签到-礼物右
+      { src: "top/gift_right.png", id: "top_gift_right", container: "top", position: { x: 4435, y: 1180 } },
 
       // 签到门-顶部
       { src: "top/door_right.png", id: "top_door_right", container: "top", position: { x: 1395, y: 635 } },
@@ -62,21 +92,58 @@
       { src: "top/door_right.png", id: "top_door_right_2", container: "top", position: { x: 4895, y: 635 } },
       { src: "top/wall_right.png", id: "top_wall_right_2", container: "top", position: { x: 4893, y: 0 } },
 
+      //表彰-鼓掌
+      { src: "top/applause1.png", id: "top_applause1", container: "top", position: { x: 5345, y: 1219 } },
+      { src: "top/applause2.png", id: "top_applause2", container: "top", position: { x: 5354, y: 1184 } },
+      { src: "top/applause3.png", id: "top_applause3", container: "top", position: { x: 5318, y: 1201 } },
+      { src: "top/applause4.png", id: "top_applause4", container: "top", position: { x: 5465, y: 1120 } },
+      { src: "top/applause5.png", id: "top_applause5", container: "top", position: { x: 5625, y: 1158 } },
+      { src: "top/applause6.png", id: "top_applause6", container: "top", position: { x: 5460, y: 1245 } },
+      { src: "top/applause7.png", id: "top_applause7", container: "top", position: { x: 5580, y: 1215 } },
+
+      //表彰-跳舞
+      { src: "top/dance1.png", id: "top_dance1", container: "top", position: { x: 6510, y: 1045 } },
+      { src: "top/dance2.png", id: "top_dance2", container: "top", position: { x: 6725, y: 1017 } },
+      { src: "top/dance3.png", id: "top_dance3", container: "top", position: { x: 6935, y: 1060 } },
+      { src: "top/dance4.png", id: "top_dance4", container: "top", position: { x: 7120, y: 1015 } },
+
+      //表彰-灯光
+      { src: "top/lighting_left.png", id: "top_lighting_left", container: "top", position: { x: 5795, y: 245 } },
+      { src: "top/lighting_right.png", id: "top_lighting_right", container: "top", position: { x: 6370, y: 245 } },
+
+      //表彰-游戏
+      { src: "top/game_decorate.png", id: "top_game_decorate", container: "top", position: { x: 8280, y: 835 } },
+      { src: "top/game1.png", id: "top_game1", container: "top", position: { x: 8370, y: 1000 } },
+      { src: "top/game5.png", id: "top_game5", container: "top", position: { x: 9010, y: 990 } },
+      { src: "top/game4.png", id: "top_game4", container: "top", position: { x: 8905, y: 970 } },
+      { src: "top/game3.png", id: "top_game3", container: "top", position: { x: 8726, y: 945 } },
+      { src: "top/game2.png", id: "top_game2", container: "top", position: { x: 8540, y: 990 } },
+
+      //表彰-抽奖
+      { src: "top/draw_people.png", id: "top_draw_people", container: "top", position: { x: 9700, y: 995 } },
+      { src: "top/lucky_draw.png", id: "top_lucky_draw", container: "top", position: { x: 9990, y: 1102 } },
+
       // 结束门-顶部
       { src: "top/door_right.png", id: "top_door_right_3", container: "top", position: { x: 10595, y: 635 } },
       { src: "top/wall_right.png", id: "top_wall_right_3", container: "top", position: { x: 10593, y: 0 } },
 
     ],
+    imageBlobs = {},
     imageDisplayObjects = {},
+    loadedImagesFinished = false,
     run_left = document.getElementById('run_left'),
     run_right = document.getElementById('run_right'),
-    running = false;
+    run_direction = 'right',
+    run_distance = 0,
+    run_max_distance = 10770;
 
   //绘制图片
   function drawImage(imgObject) {
     var image = new createjs.Bitmap(imgObject.img);
     image.x = imgObject.pos.x;
     image.y = imgObject.pos.y;
+    image.visible = !imgObject.hidden
+    imageDisplayObjects[imgObject.id] = image
 
     switch (imgObject.container) {
       case 'bottom':
@@ -86,12 +153,34 @@
         layer_middle.addChild(image);
         break;
       case 'role':
+        if (imgObject.id === 'role_axle') {
+          image.scale = 2
+        }
         layer_role.addChild(image);
         break;
       case 'top':
         layer_top.addChild(image);
         break;
     }
+    stage.update()
+  }
+
+  function drawRoleText() {
+    var roleText = new createjs.Text("Hello World", "24px Arial", "#000"),
+      bounds = roleText.getBounds();
+    roleText.textAlign = 'start'
+    roleText.x = center + bounds.width
+    roleText.y = 700
+    roleText.textBaseline = "alphabetic";
+
+
+    var RoleTextRect = new createjs.Shape();
+    RoleTextRect.x = center;
+    RoleTextRect.y = 680;
+    RoleTextRect.graphics.clear().beginStroke("#ddd").beginFill("#FFFFFF").drawRect(-10, -10, roleText.getMeasuredWidth() + 20, 50);
+
+    layer_role.addChild(RoleTextRect);
+    layer_role.addChild(roleText);
     stage.update()
   }
 
@@ -104,16 +193,20 @@
     }
 
     function _handleComplete(event) {
-      Object.keys(imageDisplayObjects).forEach(function (itemId) {
-        drawImage(imageDisplayObjects[itemId])
+      Object.keys(imageBlobs).forEach(function (itemId) {
+        drawImage(imageBlobs[itemId])
       })
+      drawRoleText()
+      loadedImagesFinished = true
     }
 
     function _handleFileLoad(event) {
-      imageDisplayObjects[event.item.id] = {
+      imageBlobs[event.item.id] = {
+        id: event.item.id,
         img: event.result,
         pos: event.item.position,
         container: event.item.container,
+        hidden: event.item.hidden || false
       }
     }
 
@@ -139,64 +232,77 @@
   }
 
   //绑定控制事件
-  function bindControlEvent() {
-    function _run(direct) {
-      (function (running) {
-        setTimeout(function () {
-          console.log('run ' + direct)
-          var diff = direct === 'right' ? 5 : -5
-          layer_bottom.regX = layer_bottom.regX + diff
-          layer_middle.regX = layer_middle.regX + diff
-          layer_role.regX = layer_role.regX + diff
-          layer_top.regX = layer_top.regX + diff
-          stage.update()
-
-          if (running) {
-            _run(direct)
-          }
-        })
-      })(running)
+  function bindEvents() {
+    function _roleRotation(id, isRun, direction) {
+      var role_stand_eyeopen = imageDisplayObjects[id]
+      role_stand_eyeopen.rotation = isRun ? direction === 'right' ? 5 : -5 : 0
+      role_stand_eyeopen.regX = isRun ? direction === 'right' ? -30 : 32 : 0
+      role_stand_eyeopen.regY = isRun ? direction === 'right' ? 16 : -12 : 0
+      stage.update()
     }
 
     run_left.addEventListener('touchstart', function (e) {
       e.preventDefault()
-      running = true
-      _run('left')
+      createjs.Ticker.paused = false
+      run_direction = 'left'
+      imageDisplayObjects['role_stand_eyeopen_right'].visible = false
+      imageDisplayObjects['role_stand_eyeopen_left'].visible = true
+      _roleRotation('role_stand_eyeopen_left', true, 'left')
     });
 
     run_left.addEventListener('touchend', function (e) {
       e.preventDefault()
-      running = false
-      _run('left')
+      createjs.Ticker.paused = true
+      _roleRotation('role_stand_eyeopen_left', false, 'left')
     });
 
     run_right.addEventListener('touchstart', function (e) {
       e.preventDefault()
-      running = true
-      _run('right')
+      createjs.Ticker.paused = false
+      run_direction = 'right'
+      imageDisplayObjects['role_stand_eyeopen_right'].visible = true
+      imageDisplayObjects['role_stand_eyeopen_left'].visible = false
+      _roleRotation('role_stand_eyeopen_right', true, 'right')
     });
 
     run_right.addEventListener('touchend', function (e) {
       e.preventDefault()
-      running = false
+      createjs.Ticker.paused = true
+      _roleRotation('role_stand_eyeopen_right', false, 'right')
     });
+  }
+
+  //定时器回调
+  function handleTick(event) {
+    if (!event.paused && loadedImagesFinished) {
+      //画布移动
+      run_distance += run_direction === 'right' ? 10 : -10
+      console.log('run_distance', run_distance)
+      if (run_distance >= 0 && run_distance <= run_max_distance) {
+        layer_bottom.regX = run_distance
+        layer_middle.regX = run_distance
+        layer_top.regX = run_distance
+        stage.update()
+      }
+    }
   }
 
   //初始化舞台
   (function () {
-    var documentElement = document.documentElement,
-      w = documentElement.clientWidth,
-      h = documentElement.clientHeight;
-
     stage = new createjs.Stage("canvas");
     createjs.Touch.enable(stage);
 
     stage.canvas.width = 750;
     stage.canvas.height = 1334;
-    stage.scaleY = (h * 2 / 1334) / 2
-    stage.scaleX = (w * 2 / 750) / 2 //todo
+    stage.scale = scale;
 
-    bindControlEvent()
+    //注册监听器
+    createjs.Ticker.addEventListener("tick", handleTick);
+    createjs.Ticker.timingMode = createjs.Ticker.RAF;
+    createjs.Ticker.framerate = 30;
+    createjs.Ticker.paused = true;
+
+    bindEvents()
     initContainer()
     preloadImages()
   })()
