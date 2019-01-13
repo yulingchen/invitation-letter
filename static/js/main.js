@@ -56,7 +56,8 @@
       { src: "role/stand_eyeclose_right.png", id: "role_stand_eyeclose_right", hidden: true, container: "role", position: { x: center, y: 738 } },
       { src: "role/stand_eyeopen_left.png", id: "role_stand_eyeopen_left", hidden: true, container: "role", position: { x: center + 10, y: 738 } },
       { src: "role/stand_eyeclose_left.png", id: "role_stand_eyeclose_left", hidden: true, container: "role", position: { x: center + 10, y: 738 } },
-      { src: "role/axle.png", id: "role_axle", container: "role", position: { x: center + 106, y: 1033 } },
+      { src: "role/axle.png?t=1", id: "role_axle", container: "role", position: { x: center + 106, y: 1033 } },
+      { src: "role/axle3.png", id: "role_axle3", container: "role", position: { x: center + 170, y: 1096 } },
 
       // 欢迎 - 指示牌
       { src: "top/direct.png", id: "top_direct", container: "top", position: { x: -20, y: 95 } },
@@ -163,8 +164,8 @@
     var image = new createjs.Bitmap(imgObject.img);
     image.x = imgObject.pos.x;
     image.y = imgObject.pos.y;
-    image.visible = !imgObject.hidden
-    imageDisplayObjects[imgObject.id] = image
+    image.visible = !imgObject.hidden;
+    imageDisplayObjects[imgObject.id] = image;
 
     switch (imgObject.container) {
       case 'bottom':
@@ -175,7 +176,7 @@
         break;
       case 'role':
         if (imgObject.id === 'role_axle') {
-          image.scale = 2
+          image.scale = 2;
         }
         layer_role.addChild(image);
         break;
@@ -183,7 +184,7 @@
         layer_top.addChild(image);
         break;
     }
-    stage.update()
+    stage.update();
   }
 
   //绘制角色提示文字
@@ -192,9 +193,9 @@
       bounds = roleText.getBounds();
     drawRoleCenter = (w - bounds.width * scale) / 2 / scale;
 
-    roleText.textAlign = 'start'
-    roleText.x = drawRoleCenter
-    roleText.y = 700
+    roleText.textAlign = 'start';
+    roleText.x = drawRoleCenter;
+    roleText.y = 700;
     roleText.textBaseline = "alphabetic";
 
     var RoleTextRect = new createjs.Shape();
@@ -202,34 +203,34 @@
     RoleTextRect.y = 680;
     RoleTextRect.graphics.clear().beginStroke("#ddd").beginFill("#FFFFFF").drawRect(-10, -10, roleText.getMeasuredWidth() + 20, 50);
 
-    imageDisplayObjects['RoleTextRect'] = RoleTextRect
-    imageDisplayObjects['roleText'] = roleText
+    imageDisplayObjects['RoleTextRect'] = RoleTextRect;
+    imageDisplayObjects['roleText'] = roleText;
 
     layer_role.addChild(RoleTextRect);
     layer_role.addChild(roleText);
 
-    RoleTextRect.visible = false
-    roleText.visible = false
+    RoleTextRect.visible = false;
+    roleText.visible = false;
 
-    stage.update()
+    stage.update();
   }
 
   //隐藏角色提示文字
   function hideRoleText() {
-    var RoleTextRect = imageDisplayObjects['RoleTextRect']
-    var roleText = imageDisplayObjects['roleText']
-    RoleTextRect.visible = false
-    roleText.visible = false
+    var RoleTextRect = imageDisplayObjects['RoleTextRect'];
+    var roleText = imageDisplayObjects['roleText'];
+    RoleTextRect.visible = false;
+    roleText.visible = false;
   }
 
   //更新角色提示文字
   function setRoleText(text) {
-    var RoleTextRect = imageDisplayObjects['RoleTextRect']
-    var roleText = imageDisplayObjects['roleText']
+    var RoleTextRect = imageDisplayObjects['RoleTextRect'];
+    var roleText = imageDisplayObjects['roleText'];
     RoleTextRect.graphics.clear().beginStroke("#ddd").beginFill("#FFFFFF").drawRect(-10, -10, roleText.getMeasuredWidth() + 20, 50);
-    RoleTextRect.visible = true
-    roleText.visible = true
-    roleText.text = text
+    RoleTextRect.visible = true;
+    roleText.visible = true;
+    roleText.text = text;
   }
 
   //预加载图片资源
@@ -242,12 +243,12 @@
 
     function _handleComplete(event) {
       Object.keys(imageBlobs).forEach(function (itemId) {
-        drawImage(imageBlobs[itemId])
+        drawImage(imageBlobs[itemId]);
       })
-      drawRoleText()
-      initMask()
-      bindEvents()
-      loadedImagesFinished = true
+      drawRoleText();
+      initMask();
+      bindEvents();
+      loadedImagesFinished = true;
     }
 
     function _handleFileLoad(event) {
@@ -269,65 +270,65 @@
   //初始化容器
   function initContainer() {
     function _createContainer() {
-      var layer = new createjs.Container()
-      layer.x = 0
-      layer.y = 0
+      var layer = new createjs.Container();
+      layer.x = 0;
+      layer.y = 0;
       stage.addChild(layer);
-      return layer
+      return layer;
     }
-    layer_bottom = _createContainer()
-    layer_middle = _createContainer()
-    layer_role = _createContainer()
-    layer_top = _createContainer()
+    layer_bottom = _createContainer();
+    layer_middle = _createContainer();
+    layer_role = _createContainer();
+    layer_top = _createContainer();
   }
 
   function initProgressBar() {
-    progressBar = new createjs.Shape()
-    progressBar.alpha = 0.5
+    progressBar = new createjs.Shape();
+    progressBar.alpha = 0.5;
     progressBar.graphics.beginFill("#e5f7a5").drawRect(100, h / 2 / scale + 30, 0, 3);
 
     var progressBarText = new createjs.Text("正在合成明源云创年会碎片...", "32px Arial", "#e5f7a5"),
       bounds = progressBarText.getBounds();
     progressBarTextCenter = (w - bounds.width * scale) / 2 / scale;
-    progressBarText.textAlign = 'start'
-    progressBarText.x = progressBarTextCenter
-    progressBarText.y = (h / 2 / scale) - 10
+    progressBarText.textAlign = 'start';
+    progressBarText.x = progressBarTextCenter;
+    progressBarText.y = (h / 2 / scale) - 10;
     progressBarText.textBaseline = "alphabetic";
 
-    stage.addChild(progressBar)
-    stage.addChild(progressBarText)
-    stage.update()
+    stage.addChild(progressBar);
+    stage.addChild(progressBarText);
+    stage.update();
   }
 
   function initMask() {
-    tip_mask = new createjs.Shape()
-    tip_mask.alpha = 0.5
+    tip_mask = new createjs.Shape();
+    tip_mask.alpha = 0.5;
     tip_mask.graphics.beginFill("#000").drawRect(0, 0, w / scale, h / scale);
 
     //加载操作提示
     var preload = new createjs.LoadQueue(true, imageDir);
     function _handleComplete(event) {
       Object.keys(tipImageBlobs).forEach(function (itemId) {
-        var imgObject = tipImageBlobs[itemId]
+        var imgObject = tipImageBlobs[itemId];
         var image = new createjs.Bitmap(imgObject.img);
         image.x = imgObject.pos.x;
         image.y = imgObject.pos.y;
-        image.visible = !imgObject.hidden
-        tipImageDisplayObjects[imgObject.id] = image
+        image.visible = !imgObject.hidden;
+        tipImageDisplayObjects[imgObject.id] = image;
       })
 
-      var tipLeft = tipImageDisplayObjects['top_tip_left']
-      var tipRight = tipImageDisplayObjects['top_tip_right']
-      var tipRightWidth = tipRight.getBounds().width
-      tipRight.x = w / scale - tipRightWidth - 50
+      var tipLeft = tipImageDisplayObjects['top_tip_left'];
+      var tipRight = tipImageDisplayObjects['top_tip_right'];
+      var tipRightWidth = tipRight.getBounds().width;
+      tipRight.x = w / scale - tipRightWidth - 50;
 
-      stage.addChild(tip_mask)
-      stage.addChild(tipLeft)
-      stage.addChild(tipRight)
-      stage.update()
+      stage.addChild(tip_mask);
+      stage.addChild(tipLeft);
+      stage.addChild(tipRight);
+      stage.update();
 
-      tip_init_timeout = createjs.Ticker.getTime()
-      tip_timeout = tip_init_timeout
+      tip_init_timeout = createjs.Ticker.getTime();
+      tip_timeout = tip_init_timeout;
     }
 
     function _handleFileLoad(event) {
@@ -346,68 +347,80 @@
   }
 
   function hideMask() {
-    var tipLeft = tipImageDisplayObjects['top_tip_left']
-    var tipRight = tipImageDisplayObjects['top_tip_right']
-    tipLeft.visible = false
-    tipRight.visible = false
-    tip_mask.visible = false
-    tip_show = false
-    stage.update()
+    var tipLeft = tipImageDisplayObjects['top_tip_left'];
+    var tipRight = tipImageDisplayObjects['top_tip_right'];
+    tipLeft.visible = false;
+    tipRight.visible = false;
+    tip_mask.visible = false;
+    tip_show = false;
+    stage.update();
   }
 
   //绑定控制事件
   function bindEvents() {
     function _roleRotation(id, isRun, direction) {
-      var role_stand_eyeopen = imageDisplayObjects[id]
-      role_stand_eyeopen.rotation = isRun ? direction === 'right' ? 5 : -5 : 0
-      role_stand_eyeopen.regX = isRun ? direction === 'right' ? -30 : 32 : 0
-      role_stand_eyeopen.regY = isRun ? direction === 'right' ? 16 : -12 : 0
-      stage.update()
+      var role_stand_eyeopen = imageDisplayObjects[id];
+      role_stand_eyeopen.rotation = isRun ? direction === 'right' ? 5 : -5 : 0;
+      role_stand_eyeopen.regX = isRun ? direction === 'right' ? -30 : 32 : 0;
+      role_stand_eyeopen.regY = isRun ? direction === 'right' ? 16 : -12 : 0;
+      stage.update();
     }
 
     run_left.addEventListener('touchstart', function (e) {
-      e.preventDefault()
-      createjs.Ticker.paused = false
-      run_direction = 'left'
-      imageDisplayObjects['role_stand_eyeopen_right'].visible = false
-      imageDisplayObjects['role_stand_eyeopen_left'].visible = true
-      _roleRotation('role_stand_eyeopen_left', true, 'left')
-      _roleRotation('role_stand_eyeclose_left', true, 'left')
+      e.preventDefault();
+      createjs.Ticker.paused = false;
+      run_direction = 'left';
+      imageDisplayObjects['role_stand_eyeopen_right'].visible = false;
+      imageDisplayObjects['role_stand_eyeopen_left'].visible = true;
+      _roleRotation('role_stand_eyeopen_left', true, 'left');
+      _roleRotation('role_stand_eyeclose_left', true, 'left');
+
+      var role_axle = imageDisplayObjects['role_axle3'];
+      if (role_axle) {
+        role_axle.rotation = 0;
+        createjs.Tween.get(role_axle, { loop: -1, reversed: run_direction !== 'right' }).to({ rotation: 360 }, 1000);
+      }
     });
 
     run_left.addEventListener('touchend', function (e) {
-      e.preventDefault()
-      createjs.Ticker.paused = true
-      _roleRotation('role_stand_eyeopen_left', false, 'left')
-      _roleRotation('role_stand_eyeclose_left', false, 'left')
+      e.preventDefault();
+      createjs.Ticker.paused = true;
+      _roleRotation('role_stand_eyeopen_left', false, 'left');
+      _roleRotation('role_stand_eyeclose_left', false, 'left');
     });
 
     run_right.addEventListener('touchstart', function (e) {
-      e.preventDefault()
-      createjs.Ticker.paused = false
-      run_direction = 'right'
-      imageDisplayObjects['role_stand_eyeopen_right'].visible = true
-      imageDisplayObjects['role_stand_eyeopen_left'].visible = false
-      _roleRotation('role_stand_eyeopen_right', true, 'right')
-      _roleRotation('role_stand_eyeclose_right', true, 'right')
+      e.preventDefault();
+      createjs.Ticker.paused = false;
+      run_direction = 'right';
+      imageDisplayObjects['role_stand_eyeopen_right'].visible = true;
+      imageDisplayObjects['role_stand_eyeopen_left'].visible = false;
+      _roleRotation('role_stand_eyeopen_right', true, 'right');
+      _roleRotation('role_stand_eyeclose_right', true, 'right');
+
+      var role_axle = imageDisplayObjects['role_axle3'];
+      if (role_axle) {
+        role_axle.rotation = 0;
+        createjs.Tween.get(role_axle, { loop: -1, reversed: run_direction !== 'right' }).to({ rotation: 360 }, 1000);
+      }
     });
 
     run_right.addEventListener('touchend', function (e) {
-      e.preventDefault()
-      createjs.Ticker.paused = true
-      _roleRotation('role_stand_eyeopen_right', false, 'right')
-      _roleRotation('role_stand_eyeclose_right', false, 'right')
+      e.preventDefault();
+      createjs.Ticker.paused = true;
+      _roleRotation('role_stand_eyeopen_right', false, 'right');
+      _roleRotation('role_stand_eyeclose_right', false, 'right');
     });
 
     sound_control.addEventListener('click', function () {
       if (sound_status === 'play') {
-        sound_status = 'stop'
-        sound_control.className = 'sound-control stop'
-        stopSound()
+        sound_status = 'stop';
+        sound_control.className = 'sound-control stop';
+        stopSound();
       } else {
-        sound_status = 'play'
-        sound_control.className = 'sound-control'
-        playSound()
+        sound_status = 'play';
+        sound_control.className = 'sound-control';
+        playSound();
       }
     })
 
@@ -415,18 +428,18 @@
 
   //显示分享图片
   function showShare() {
-    var posHeight = document.getElementById('position').clientHeight
-    document.getElementById('code_picture').style.display = 'block'
-    document.getElementById('position').style.display = 'block'
+    var posHeight = document.getElementById('position').clientHeight;
+    document.getElementById('code_picture').style.display = 'block';
+    document.getElementById('position').style.display = 'block';
     document.getElementById('position').style.bottom = 0;
-    document.getElementById('canvas').style.display = 'none'
-    document.getElementById('code_picture').style.bottom = (posHeight - 68) + 'px'
+    document.getElementById('canvas').style.display = 'none';
+    document.getElementById('code_picture').style.bottom = (posHeight - 68) + 'px';
   }
 
   //注册背景音乐
   function playSound() {
-    sound_control.style.display = 'block'
-    var props = new createjs.PlayPropsConfig().set({ interrupt: createjs.Sound.INTERRUPT_ANY, loop: -1, volume: 0.5 })
+    sound_control.style.display = 'block';
+    var props = new createjs.PlayPropsConfig().set({ interrupt: createjs.Sound.INTERRUPT_ANY, loop: -1, volume: 0.5 });
     createjs.Sound.play(soundID, props);
   }
 
@@ -446,60 +459,60 @@
   function handleTick(event) {
     // console.log('delta', event.delta)
     if (!loadedImagesFinished && progressNum < (w / scale - 200)) {
-      progressNum += 5
+      progressNum += 5;
       progressBar.graphics.drawRect(100, h / 2 / scale + 30, progressNum, 3);
-      stage.update()
+      stage.update();
     } else {
-      progressBar.visible = false
+      progressBar.visible = false;
     }
 
     //隐藏遮罩
     if (tip_show) {
-      tip_timeout += event.delta
+      tip_timeout += event.delta;
       if (!event.paused || tip_timeout - tip_init_timeout > 3000) {
-        hideMask()
+        hideMask();
       }
     }
 
     //角色眨眼
-    eye_timeout += event.delta
+    eye_timeout += event.delta;
     if (eye_status === 'open' && eye_timeout > 2000) { //闭眼
-      eye_status = 'close'
-      eye_timeout = 0
+      eye_status = 'close';
+      eye_timeout = 0;
       if (run_direction === 'right') {
-        imageDisplayObjects['role_stand_eyeopen_right'].visible = false
-        imageDisplayObjects['role_stand_eyeclose_right'].visible = true
+        imageDisplayObjects['role_stand_eyeopen_right'].visible = false;
+        imageDisplayObjects['role_stand_eyeclose_right'].visible = true;
       } else {
-        imageDisplayObjects['role_stand_eyeopen_left'].visible = false
-        imageDisplayObjects['role_stand_eyeclose_left'].visible = true
+        imageDisplayObjects['role_stand_eyeopen_left'].visible = false;
+        imageDisplayObjects['role_stand_eyeclose_left'].visible = true;
       }
-      stage.update()
+      stage.update();
     }
 
     if (eye_status === 'close' && eye_timeout > 100) { //睁眼
       eye_status = 'open'
       if (run_direction === 'right') {
-        imageDisplayObjects['role_stand_eyeopen_right'].visible = true
-        imageDisplayObjects['role_stand_eyeclose_right'].visible = false
+        imageDisplayObjects['role_stand_eyeopen_right'].visible = true;
+        imageDisplayObjects['role_stand_eyeclose_right'].visible = false;
       } else {
-        imageDisplayObjects['role_stand_eyeopen_left'].visible = true
-        imageDisplayObjects['role_stand_eyeclose_left'].visible = false
+        imageDisplayObjects['role_stand_eyeopen_left'].visible = true;
+        imageDisplayObjects['role_stand_eyeclose_left'].visible = false;
       }
-      stage.update()
+      stage.update();
     }
 
     if (!event.paused && loadedImagesFinished && !run_disable && !tip_show) {
-      run_distance += run_direction === 'right' ? 10 : -10
-      if (run_distance < 0) run_distance = 0
-      if (run_distance > run_max_distance) run_distance = run_max_distance
-      console.log('run_distance', run_distance)
+      run_distance += run_direction === 'right' ? 10 : -10;
+      if (run_distance < 0) run_distance = 0;
+      if (run_distance > run_max_distance) run_distance = run_max_distance;
+      console.log('run_distance', run_distance);
 
       //画布移动
       if (run_distance >= 0 && run_distance <= run_max_distance) {
-        layer_bottom.regX = run_distance
-        layer_middle.regX = run_distance
-        layer_top.regX = run_distance
-        stage.update()
+        layer_bottom.regX = run_distance;
+        layer_middle.regX = run_distance;
+        layer_top.regX = run_distance;
+        stage.update();
       }
 
       //开关门
@@ -508,47 +521,47 @@
       var top_door_right_3 = imageDisplayObjects['top_door_right_3'];
 
       if (run_distance >= 670 && run_distance <= 1370) {
-        top_door_right_1.scaleX = 0
+        top_door_right_1.scaleX = 0;
       } else {
-        top_door_right_1.scaleX = 1
+        top_door_right_1.scaleX = 1;
       }
 
       if (run_distance >= 4220 && run_distance <= 4880) {
-        top_door_right_2.scaleX = 0
+        top_door_right_2.scaleX = 0;
       } else {
-        top_door_right_2.scaleX = 1
+        top_door_right_2.scaleX = 1;
       }
 
       if (run_distance >= 9950) {
-        top_door_right_3.scaleX = 0
+        top_door_right_3.scaleX = 0;
       } else {
-        top_door_right_3.scaleX = 1
+        top_door_right_3.scaleX = 1;
       }
 
       //角色提示文字
       hideRoleText()
       if (run_distance >= 50 && run_distance <= 900 && run_direction === 'right') {
-        setRoleText('Let’s Go !')
+        setRoleText('Let’s Go !');
       } else if (run_distance >= 1150 && run_distance <= 1880) {
-        setRoleText('领伴手礼啦!')
+        setRoleText('领伴手礼啦!');
       } else if (run_distance >= 2160 && run_distance <= 3250) {
-        setRoleText('快来拍一张鸭~')
+        setRoleText('快来拍一张鸭~');
       } else if (run_distance >= 3440 && run_distance <= 4000) {
-        setRoleText('一起玩游戏吧~')
+        setRoleText('一起玩游戏吧~');
       } else if (run_distance >= 4820 && run_distance <= 5530) {
-        setRoleText('666~666666~')
+        setRoleText('666~666666~');
       } else if (run_distance >= 6000 && run_distance <= 7390) {
-        setRoleText('好High哟~')
+        setRoleText('好High哟~');
       } else if (run_distance >= 7950 && run_distance <= 8860) {
-        setRoleText('谁是最强战队呢?')
+        setRoleText('谁是最强战队呢?');
       } else if (run_distance >= 9280 && run_distance <= 9920) {
-        setRoleText('你是锦鲤本鲤嘛~')
+        setRoleText('你是锦鲤本鲤嘛~');
       } else if (run_distance >= run_max_distance) {
-        run_disable = true
-        layer_role.visible = false
-        stopSound()
-        stage.update()
-        showShare()
+        run_disable = true;
+        layer_role.visible = false;
+        stopSound();
+        stage.update();
+        showShare();
       }
     }
   }
@@ -594,10 +607,10 @@
     createjs.Ticker.framerate = 30;
     createjs.Ticker.paused = true;
 
-    registerSound()
-    initProgressBar()
-    initContainer()
-    preloadImages()
-    timeDown("timeDown", "2019-1-15 14:30:00")
+    registerSound();
+    initProgressBar();
+    initContainer();
+    preloadImages();
+    timeDown("timeDown", "2019-1-15 14:30:00");
   })()
 })()
