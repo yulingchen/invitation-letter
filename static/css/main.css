@@ -1,6 +1,7 @@
 body{
   height: 100%;
   overflow: hidden;
+  background-color: #c63424;
 }
 
 #canvas{
@@ -9,7 +10,7 @@ body{
 
 .control{
   position: absolute;
-  top:40%;
+  top:20%;
   right:0;
   bottom:0;
   left:0;
@@ -26,4 +27,73 @@ body{
 
 .control .run-right{
   float:right;
+}
+
+.code-picture{
+  display: none;
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  background-color: #c63424;
+  overflow: hidden;
+}
+
+.code-picture img{
+  position: absolute;
+}
+
+.code-picture img.code{
+  z-index: 1;
+  opacity: 0;
+}
+
+.position{
+  position: fixed;
+  right:1px;
+  bottom:-140px;
+  background-color: #fff;
+  padding:0  10px;
+  border-radius: 10px 10px 0 0;
+  width:80%;
+  overflow: hidden;
+  transition: bottom 0.5s ease-out;
+}
+
+.position .section{
+  font-size: 12px;
+  padding:5px 0;
+  border-bottom:1px solid #f2f5f4;
+}
+
+.position .section:last-child{
+  border-bottom:none;
+}
+
+.position .section .title{
+  margin-bottom:1px;
+}
+
+.position .section a{
+  text-decoration: none;
+  color: #000;
+}
+
+.position .section .content p{
+  line-height: 1.1;
+  margin:0;
+}
+
+.position .timeDown{
+  float: right;
+  background: url(../images/timedown.svg) no-repeat;
+  padding-left:18px;
+}
+
+.position .position-icon{
+  float: right;
+  background: url(../images/position.svg) no-repeat;
+  width: 32px;
+  height: 32px;
 }

@@ -47,6 +47,9 @@
       { src: "middle/door_left.png", id: "middle_door_left_3", container: "middle", position: { x: 10568, y: 594 } },
       { src: "middle/wall_left.png", id: "middle_wall_left_3", container: "middle", position: { x: 10528, y: 0 } },
 
+      //结束-分享图片
+      // { src: "middle/share.png", id: "middle_share", container: "middle", position: { x: 11100, y: 50 } },
+
       // 角色
       { src: "role/shadow.png", id: "role_shadow", container: "role", position: { x: center + 118, y: 1171 } },
       { src: "role/stand_eyeopen_right.png", id: "role_stand_eyeopen_right", container: "role", position: { x: center, y: 738 } },
@@ -123,19 +126,19 @@
       { src: "top/draw_people.png", id: "top_draw_people", container: "top", position: { x: 9700, y: 995 } },
       { src: "top/lucky_draw.png", id: "top_lucky_draw", container: "top", position: { x: 9990, y: 1102 } },
 
-      // 结束门-顶部
+      //结束门-顶部
       { src: "top/door_right.png", id: "top_door_right_3", container: "top", position: { x: 10595, y: 635 } },
       { src: "top/wall_right.png", id: "top_wall_right_3", container: "top", position: { x: 10593, y: 0 } },
-
     ],
     imageBlobs = {},
     imageDisplayObjects = {},
     loadedImagesFinished = false,
     run_left = document.getElementById('run_left'),
     run_right = document.getElementById('run_right'),
+    run_disable = false,
     run_direction = 'right',
     run_distance = 0,
-    run_max_distance = 10770;
+    run_max_distance = 10540;
 
   //绘制图片
   function drawImage(imgObject) {
@@ -165,23 +168,50 @@
     stage.update()
   }
 
+  //绘制角色提示文字
   function drawRoleText() {
     var roleText = new createjs.Text("Hello World", "24px Arial", "#000"),
       bounds = roleText.getBounds();
+    drawRoleCenter = (w - bounds.width * scale) / 2 / scale;
+
     roleText.textAlign = 'start'
-    roleText.x = center + bounds.width
+    roleText.x = drawRoleCenter
     roleText.y = 700
     roleText.textBaseline = "alphabetic";
 
-
     var RoleTextRect = new createjs.Shape();
-    RoleTextRect.x = center;
+    RoleTextRect.x = drawRoleCenter;
     RoleTextRect.y = 680;
     RoleTextRect.graphics.clear().beginStroke("#ddd").beginFill("#FFFFFF").drawRect(-10, -10, roleText.getMeasuredWidth() + 20, 50);
 
+    imageDisplayObjects['RoleTextRect'] = RoleTextRect
+    imageDisplayObjects['roleText'] = roleText
+
     layer_role.addChild(RoleTextRect);
     layer_role.addChild(roleText);
+
+    RoleTextRect.visible = false
+    roleText.visible = false
+
     stage.update()
+  }
+
+  //隐藏角色提示文字
+  function hideRoleText() {
+    var RoleTextRect = imageDisplayObjects['RoleTextRect']
+    var roleText = imageDisplayObjects['roleText']
+    RoleTextRect.visible = false
+    roleText.visible = false
+  }
+
+  //更新角色提示文字
+  function setRoleText(text) {
+    var RoleTextRect = imageDisplayObjects['RoleTextRect']
+    var roleText = imageDisplayObjects['roleText']
+    RoleTextRect.graphics.clear().beginStroke("#ddd").beginFill("#FFFFFF").drawRect(-10, -10, roleText.getMeasuredWidth() + 20, 50);
+    RoleTextRect.visible = true
+    roleText.visible = true
+    roleText.text = text
   }
 
   //预加载图片资源
@@ -272,19 +302,83 @@
     });
   }
 
+  //显示分享图片
+  function showShare() {
+    var posHeight = document.getElementById('position').clientHeight
+    document.getElementById('code_picture').style.display = 'block'
+    document.getElementById('position').style.display = 'block'
+    document.getElementById('position').style.bottom = 0;
+    document.getElementById('canvas').style.display = 'none'
+    document.getElementById('code_picture').style.bottom = (posHeight - 68) + 'px'
+  }
+
   //定时器回调
   function handleTick(event) {
-    if (!event.paused && loadedImagesFinished) {
-      //画布移动
+    if (!event.paused && loadedImagesFinished && !run_disable) {
       run_distance += run_direction === 'right' ? 10 : -10
+      if (run_distance < 0) run_distance = 0
+      if (run_distance > run_max_distance) run_distance = run_max_distance
       console.log('run_distance', run_distance)
+
+      //画布移动
       if (run_distance >= 0 && run_distance <= run_max_distance) {
         layer_bottom.regX = run_distance
         layer_middle.regX = run_distance
         layer_top.regX = run_distance
         stage.update()
       }
+
+      //角色提示文字
+      hideRoleText()
+      if (run_distance >= 50 && run_distance <= 900 && run_direction === 'right') {
+        setRoleText('Let’s Go !')
+      } else if (run_distance >= 1150 && run_distance <= 1880) {
+        setRoleText('领伴手礼啦!')
+      } else if (run_distance >= 2160 && run_distance <= 3250) {
+        setRoleText('快来拍一张鸭~')
+      } else if (run_distance >= 3440 && run_distance <= 4000) {
+        setRoleText('一起玩游戏吧~')
+      } else if (run_distance >= 4820 && run_distance <= 5530) {
+        setRoleText('666~666666~')
+      } else if (run_distance >= 6000 && run_distance <= 7390) {
+        setRoleText('好High哟~')
+      } else if (run_distance >= 7950 && run_distance <= 8860) {
+        setRoleText('谁是最强战队呢?')
+      } else if (run_distance >= 9280 && run_distance <= 9920) {
+        setRoleText('你是锦鲤本鲤嘛~')
+      } else if (run_distance >= run_max_distance) {
+        run_disable = true
+        layer_role.visible = false
+        stage.update()
+        showShare()
+      }
     }
+  }
+
+  function timeDown(id, endDateStr) {
+    //结束时间
+    var endDate = new Date(endDateStr);
+    //当前时间
+    var nowDate = new Date();
+    //相差的总秒数
+    var totalSeconds = parseInt((endDate - nowDate) / 1000);
+    //天数
+    var days = Math.floor(totalSeconds / (60 * 60 * 24));
+    //取模（余数）
+    var modulo = totalSeconds % (60 * 60 * 24);
+    //小时数
+    var hours = Math.floor(modulo / (60 * 60));
+    modulo = modulo % (60 * 60);
+    //分钟
+    var minutes = Math.floor(modulo / 60);
+    //秒
+    var seconds = modulo % 60;
+    //输出到页面
+    document.getElementById(id).innerHTML = days + "天" + hours + "时" + minutes + "分" + seconds + "秒";
+    //延迟一秒执行自己
+    setTimeout(function () {
+      timeDown(id, endDateStr);
+    }, 1000)
   }
 
   //初始化舞台
@@ -305,5 +399,7 @@
     bindEvents()
     initContainer()
     preloadImages()
+
+    timeDown("timeDown", "2019-1-15 14:30:00")
   })()
 })()
