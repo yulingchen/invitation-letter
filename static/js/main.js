@@ -138,7 +138,9 @@
     run_disable = false,
     run_direction = 'right',
     run_distance = 0,
-    run_max_distance = 10540;
+    run_max_distance = 10540,
+    progressBar = null,
+    progressNum = 0;
 
   //绘制图片
   function drawImage(imgObject) {
@@ -261,6 +263,24 @@
     layer_top = _createContainer()
   }
 
+  function initProgressBar() {
+    progressBar = new createjs.Shape()
+    progressBar.alpha = 0.5
+    progressBar.graphics.beginFill("#e5f7a5").drawRect(100, h / 2 / scale + 30, 0, 3);
+
+    var progressBarText = new createjs.Text("正在合成明源云创年会碎片...", "32px Arial", "#e5f7a5"),
+      bounds = progressBarText.getBounds();
+    progressBarTextCenter = (w - bounds.width * scale) / 2 / scale;
+    progressBarText.textAlign = 'start'
+    progressBarText.x = progressBarTextCenter
+    progressBarText.y = (h / 2 / scale) - 10
+    progressBarText.textBaseline = "alphabetic";
+
+    stage.addChild(progressBar)
+    stage.addChild(progressBarText)
+    stage.update()
+  }
+
   //绑定控制事件
   function bindEvents() {
     function _roleRotation(id, isRun, direction) {
@@ -314,6 +334,15 @@
 
   //定时器回调
   function handleTick(event) {
+    if (!loadedImagesFinished && progressNum < (w / scale - 200)) {
+      progressNum += 5
+      console.log('progressNum', progressNum)
+      progressBar.graphics.drawRect(100, h / 2 / scale + 30, progressNum, 3);
+      stage.update()
+    } else {
+      progressBar.visible = false
+    }
+
     if (!event.paused && loadedImagesFinished && !run_disable) {
       run_distance += run_direction === 'right' ? 10 : -10
       if (run_distance < 0) run_distance = 0
@@ -374,7 +403,7 @@
     //秒
     var seconds = modulo % 60;
     //输出到页面
-    document.getElementById(id).innerHTML = days + "天" + hours + "时" + minutes + "分" + seconds + "秒";
+    document.getElementById(id).innerHTML = days + " 天 " + hours + " 时 " + minutes + " 分 " + seconds + " 秒";
     //延迟一秒执行自己
     setTimeout(function () {
       timeDown(id, endDateStr);
@@ -397,9 +426,9 @@
     createjs.Ticker.paused = true;
 
     bindEvents()
+    initProgressBar()
     initContainer()
     preloadImages()
-
     timeDown("timeDown", "2019-1-15 14:30:00")
   })()
 })()
