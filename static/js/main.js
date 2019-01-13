@@ -139,6 +139,8 @@
     run_direction = 'right',
     run_distance = 0,
     run_max_distance = 10540,
+    eye_timeout = 0,
+    eye_status = 'open',
     progressBar = null,
     progressNum = 0,
     tip_show = true,
@@ -371,12 +373,14 @@
       imageDisplayObjects['role_stand_eyeopen_right'].visible = false
       imageDisplayObjects['role_stand_eyeopen_left'].visible = true
       _roleRotation('role_stand_eyeopen_left', true, 'left')
+      _roleRotation('role_stand_eyeclose_left', true, 'left')
     });
 
     run_left.addEventListener('touchend', function (e) {
       e.preventDefault()
       createjs.Ticker.paused = true
       _roleRotation('role_stand_eyeopen_left', false, 'left')
+      _roleRotation('role_stand_eyeclose_left', false, 'left')
     });
 
     run_right.addEventListener('touchstart', function (e) {
@@ -386,12 +390,14 @@
       imageDisplayObjects['role_stand_eyeopen_right'].visible = true
       imageDisplayObjects['role_stand_eyeopen_left'].visible = false
       _roleRotation('role_stand_eyeopen_right', true, 'right')
+      _roleRotation('role_stand_eyeclose_right', true, 'right')
     });
 
     run_right.addEventListener('touchend', function (e) {
       e.preventDefault()
       createjs.Ticker.paused = true
       _roleRotation('role_stand_eyeopen_right', false, 'right')
+      _roleRotation('role_stand_eyeclose_right', false, 'right')
     });
 
     sound_control.addEventListener('click', function () {
@@ -442,7 +448,6 @@
     // console.log('delta', event.delta)
     if (!loadedImagesFinished && progressNum < (w / scale - 200)) {
       progressNum += 5
-      console.log('progressNum', progressNum)
       progressBar.graphics.drawRect(100, h / 2 / scale + 30, progressNum, 3);
       stage.update()
     } else {
@@ -455,6 +460,33 @@
       if (!event.paused || tip_timeout - tip_init_timeout > 3000) {
         hideMask()
       }
+    }
+
+    //角色眨眼
+    eye_timeout += event.delta
+    if (eye_status === 'open' && eye_timeout > 2000) { //闭眼
+      eye_status = 'close'
+      eye_timeout = 0
+      if (run_direction === 'right') {
+        imageDisplayObjects['role_stand_eyeopen_right'].visible = false
+        imageDisplayObjects['role_stand_eyeclose_right'].visible = true
+      } else {
+        imageDisplayObjects['role_stand_eyeopen_left'].visible = false
+        imageDisplayObjects['role_stand_eyeclose_left'].visible = true
+      }
+      stage.update()
+    }
+
+    if (eye_status === 'close' && eye_timeout > 100) { //睁眼
+      eye_status = 'open'
+      if (run_direction === 'right') {
+        imageDisplayObjects['role_stand_eyeopen_right'].visible = true
+        imageDisplayObjects['role_stand_eyeclose_right'].visible = false
+      } else {
+        imageDisplayObjects['role_stand_eyeopen_left'].visible = true
+        imageDisplayObjects['role_stand_eyeclose_left'].visible = false
+      }
+      stage.update()
     }
 
     if (!event.paused && loadedImagesFinished && !run_disable && !tip_show) {
