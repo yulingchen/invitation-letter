@@ -246,6 +246,7 @@
       })
       drawRoleText()
       initMask()
+      bindEvents()
       loadedImagesFinished = true
     }
 
@@ -593,7 +594,6 @@
     createjs.Ticker.framerate = 30;
     createjs.Ticker.paused = true;
 
-    bindEvents()
     registerSound()
     initProgressBar()
     initContainer()
