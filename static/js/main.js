@@ -146,8 +146,6 @@
     tip_show = true,
     tip_init_timeout = 0,
     tip_timeout = 0,
-    tip_left,
-    tip_right,
     tip_mask,
     tipsImageManifest = [
       //操作提示
@@ -501,6 +499,29 @@
         layer_middle.regX = run_distance
         layer_top.regX = run_distance
         stage.update()
+      }
+
+      //开关门
+      var top_door_right_1 = imageDisplayObjects['top_door_right'];
+      var top_door_right_2 = imageDisplayObjects['top_door_right_2'];
+      var top_door_right_3 = imageDisplayObjects['top_door_right_3'];
+
+      if (run_distance >= 670 && run_distance <= 1370) {
+        top_door_right_1.scaleX = 0
+      } else {
+        top_door_right_1.scaleX = 1
+      }
+
+      if (run_distance >= 4220 && run_distance <= 4880) {
+        top_door_right_2.scaleX = 0
+      } else {
+        top_door_right_2.scaleX = 1
+      }
+
+      if (run_distance >= 9950) {
+        top_door_right_3.scaleX = 0
+      } else {
+        top_door_right_3.scaleX = 1
       }
 
       //角色提示文字
