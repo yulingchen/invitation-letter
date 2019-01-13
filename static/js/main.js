@@ -140,7 +140,20 @@
     run_distance = 0,
     run_max_distance = 10540,
     progressBar = null,
-    progressNum = 0;
+    progressNum = 0,
+    tip_show = true,
+    tip_init_timeout = 0,
+    tip_timeout = 0,
+    tip_left,
+    tip_right,
+    tip_mask,
+    tipsImageManifest = [
+      //操作提示
+      { src: "tip_left.png", id: "top_tip_left", container: "top", position: { x: 50, y: h / 2 / scale, } },
+      { src: "tip_right.png", id: "top_tip_right", container: "top", position: { x: 0, y: h / 2 / scale } },
+    ],
+    tipImageBlobs = {},
+    tipImageDisplayObjects = {};
 
   //绘制图片
   function drawImage(imgObject) {
@@ -229,6 +242,7 @@
         drawImage(imageBlobs[itemId])
       })
       drawRoleText()
+      initMask()
       loadedImagesFinished = true
     }
 
@@ -278,6 +292,62 @@
 
     stage.addChild(progressBar)
     stage.addChild(progressBarText)
+    stage.update()
+  }
+
+  function initMask() {
+    tip_mask = new createjs.Shape()
+    tip_mask.alpha = 0.5
+    tip_mask.graphics.beginFill("#000").drawRect(0, 0, w / scale, h / scale);
+
+    //加载操作提示
+    var preload = new createjs.LoadQueue(true, imageDir);
+    function _handleComplete(event) {
+      Object.keys(tipImageBlobs).forEach(function (itemId) {
+        var imgObject = tipImageBlobs[itemId]
+        var image = new createjs.Bitmap(imgObject.img);
+        image.x = imgObject.pos.x;
+        image.y = imgObject.pos.y;
+        image.visible = !imgObject.hidden
+        tipImageDisplayObjects[imgObject.id] = image
+      })
+
+      var tipLeft = tipImageDisplayObjects['top_tip_left']
+      var tipRight = tipImageDisplayObjects['top_tip_right']
+      var tipRightWidth = tipRight.getBounds().width
+      tipRight.x = w / scale - tipRightWidth - 50
+
+      stage.addChild(tip_mask)
+      stage.addChild(tipLeft)
+      stage.addChild(tipRight)
+      stage.update()
+
+      tip_init_timeout = createjs.Ticker.getTime()
+      tip_timeout = tip_init_timeout
+    }
+
+    function _handleFileLoad(event) {
+      tipImageBlobs[event.item.id] = {
+        id: event.item.id,
+        img: event.result,
+        pos: event.item.position,
+        container: event.item.container,
+        hidden: event.item.hidden || false
+      }
+    }
+
+    preload.on("complete", _handleComplete);
+    preload.on("fileload", _handleFileLoad);
+    preload.loadManifest(tipsImageManifest, true);
+  }
+
+  function hideMask() {
+    var tipLeft = tipImageDisplayObjects['top_tip_left']
+    var tipRight = tipImageDisplayObjects['top_tip_right']
+    tipLeft.visible = false
+    tipRight.visible = false
+    tip_mask.visible = false
+    tip_show = false
     stage.update()
   }
 
@@ -334,6 +404,7 @@
 
   //定时器回调
   function handleTick(event) {
+    // console.log('delta', event.delta)
     if (!loadedImagesFinished && progressNum < (w / scale - 200)) {
       progressNum += 5
       console.log('progressNum', progressNum)
@@ -343,7 +414,15 @@
       progressBar.visible = false
     }
 
-    if (!event.paused && loadedImagesFinished && !run_disable) {
+    //隐藏遮罩
+    if (tip_show) {
+      tip_timeout += event.delta
+      if (!event.paused || tip_timeout - tip_init_timeout > 3000) {
+        hideMask()
+      }
+    }
+
+    if (!event.paused && loadedImagesFinished && !run_disable && !tip_show) {
       run_distance += run_direction === 'right' ? 10 : -10
       if (run_distance < 0) run_distance = 0
       if (run_distance > run_max_distance) run_distance = run_max_distance
