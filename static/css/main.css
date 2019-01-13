@@ -29,6 +29,39 @@ body{
   float:right;
 }
 
+.sound-control{
+  display: none;
+  position: absolute;
+  top: 10px;
+  right:10px;
+}
+
+.sound-control .play,.sound-control .stop{
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+}
+
+.sound-control .play{
+  display: inline-block;
+  background: url('../images//play_sound.png') no-repeat;
+  background-size: 32px 32px;
+}
+
+.sound-control .stop{
+  display:none;
+  background: url('../images//stop_sound.png') no-repeat;
+  background-size: 32px 32px;
+}
+
+.sound-control.stop .play{
+  display: none;
+}
+
+.sound-control.stop .stop{
+  display: inline-block;
+}
+
 .code-picture{
   display: none;
   position:fixed;

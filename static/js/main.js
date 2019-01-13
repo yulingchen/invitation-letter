@@ -153,7 +153,10 @@
       { src: "tip_right.png", id: "top_tip_right", container: "top", position: { x: 0, y: h / 2 / scale } },
     ],
     tipImageBlobs = {},
-    tipImageDisplayObjects = {};
+    tipImageDisplayObjects = {},
+    soundID = 'huankuai',
+    sound_status = 'play',
+    sound_control = document.getElementById('sound_control');
 
   //绘制图片
   function drawImage(imgObject) {
@@ -390,6 +393,19 @@
       createjs.Ticker.paused = true
       _roleRotation('role_stand_eyeopen_right', false, 'right')
     });
+
+    sound_control.addEventListener('click', function () {
+      if (sound_status === 'play') {
+        sound_status = 'stop'
+        sound_control.className = 'sound-control stop'
+        stopSound()
+      } else {
+        sound_status = 'play'
+        sound_control.className = 'sound-control'
+        playSound()
+      }
+    })
+
   }
 
   //显示分享图片
@@ -400,6 +416,25 @@
     document.getElementById('position').style.bottom = 0;
     document.getElementById('canvas').style.display = 'none'
     document.getElementById('code_picture').style.bottom = (posHeight - 68) + 'px'
+  }
+
+  //注册背景音乐
+  function playSound() {
+    sound_control.style.display = 'block'
+    var props = new createjs.PlayPropsConfig().set({ interrupt: createjs.Sound.INTERRUPT_ANY, loop: -1, volume: 0.5 })
+    createjs.Sound.play(soundID, props);
+  }
+
+  function stopSound() {
+    createjs.Sound.stop();
+  }
+
+  function registerSound() {
+    createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.FlashAudioPlugin]);
+    createjs.Sound.alternateExtensions = ['mp3'];
+    createjs.Sound.addEventListener('fileload', playSound);
+    createjs.Sound.registerSound("static/sound/background_music.mp3", soundID);
+
   }
 
   //定时器回调
@@ -457,6 +492,7 @@
       } else if (run_distance >= run_max_distance) {
         run_disable = true
         layer_role.visible = false
+        stopSound()
         stage.update()
         showShare()
       }
@@ -505,6 +541,7 @@
     createjs.Ticker.paused = true;
 
     bindEvents()
+    registerSound()
     initProgressBar()
     initContainer()
     preloadImages()
